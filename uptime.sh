@@ -49,7 +49,7 @@ fi
 if [ -z "$ftpserver" ]; then
         ftpserver=""
         ftplogin=""
-        ftppassword=""
+        ftppass=""
 fi
 
 if [ "$debug" != "0" ]; then
@@ -70,7 +70,7 @@ do
 
         uptime_csv="./${filename}.csv"
 
-        ftpuptime="curl -s -T \"${uptime_csv}\" {$ftpserver} --user {$ftpuser}:{$ftppass}"
+        ftpuptime="curl -s -T \"${uptime_csv}\" $ftpserver --user $ftplogin:$ftppass"
 
         if [ "$debug" != "0" ]; then
                 echo $ftpuptime
