@@ -1,0 +1,123 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale:1">					
+        <style>
+            .wrapper {
+              width: 100vw;
+              height: 100vh;
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            }
+            html, body, #singlepagecontainer {
+                width: 100%;
+                min-height: 100%;
+                height: 100%;
+                margin: 0px;
+                padding: 0px;
+				overflow-x: hidden;
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+                overflow-y: scroll;
+            }
+
+            #controllercontainer
+            {
+                width: 99%;
+                min-height: 100%; /* I had only this */
+                height: 100%;     /* Insted of this... oops */
+                background-color: white;
+				display: inline-block;		
+            }
+
+            .part {
+                width: 100%;
+                height: 94%;
+                float: left;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+                background-color: white;
+				display: inline-block;		
+            }
+
+            .subpart {
+                margin: 0px;
+		        display: block;
+            }
+            .left
+            {
+                border-left-width: 0px;
+                border-left-style: solid;
+            }
+
+            .top
+            {
+                border-top-width: 0px;
+                border-top-style: solid;
+            }
+
+            .colorborder
+            {
+                border-color: grey;
+            }
+
+            iframe {
+                height: 93%;
+            }
+        </style>
+	<script>
+		function resizeC(nombre){
+		    var taille = 100 / nombre;
+		    var strTaille = taille + "%";
+	    	    var elements = document.getElementsByClassName("part");
+		    for (var i = 0; i < elements.length; i++) {
+			elements[i].style.width=(strTaille);
+    		    }
+    		}
+		function resizeL(nombre){
+		    var taille = 100 / nombre;
+		    var strTaille = taille + "%";
+	    	    var elements = document.getElementsByClassName("part");
+		    for (var i = 0; i < elements.length; i++) {
+			elements[i].style.height=(strTaille);
+    		    }
+    		}
+	</script>		 
+    </head>
+    <body>
+	Columns :
+	<select id=col onChange='resizeC(this.value);'>
+		<option selected>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+
+	</select>
+	Lines :
+	<select id=line onChange='resizeL(this.value);'>
+		<option selected>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+
+	</select>		  
+        <div class="singlepagecontainer">
+		    <div id="controllercontainer">
+                <div class="part top left colorborder">
+                  <div class="subpart"><a href="stat.php?source=uptime.csv" target=_blank>uptime</a></div>
+                    <iframe src="stat.php?source=uptime.csv" height="100%" width="100%" allowfullscreen="true"></iframe>
+                  </div>
+                <div class="part top left colorborder">
+                  <div class="subpart"><a href="stat.php?source=uptime.csv" target=_blank>uptime2</a></div>
+                            <iframe src="stat.php?source=uptime.csv" height="100%" width="100%" allowfullscreen="true"></iframe>
+                  </div>
+                </div>
+        </div>
+        <script>
+            var colSel = document.getElementById("col");
+            var lineSel = document.getElementById("line");
+            resizeC(colSel.options[colSel.selectedIndex].text);
+            resizeL(lineSel.options[lineSel.selectedIndex].text)
+        </script>
+    </body>
+</html>
