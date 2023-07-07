@@ -2,12 +2,15 @@
 
 if [[ ( $@ == "--help") ||  $@ == "-h" ]]
 then
-        echo "Usage: $0 [StarDate] [Interval] [Reinit] [Debug}"
+        echo "Usage: $0 [StarDate] [Interval] [Reinit] [Debug] [ftp_server] [ftp_login] [ftp_pass]"
         printf "\n"
         echo "StartDate    : Date to get transaction from (YYYY-MM-DDTHH:MM:SS) (default 2022-05-01T00:00:00)"
         echo "Interval     : Repeat each Interval"
         echo "Reinit       : (0/1) Reinit Statistics from <startDate>"
         echo "Debug        : (0/1) Enable Debug Mode"
+        echo "ftp server   : (ftp://server.com) FTP server adress to upload uptime file"
+        echo "ftp login    : FTP login"
+        echo "ftp passowrd : FTP password"
         exit 0
 fi
 
@@ -15,6 +18,11 @@ startdate=$1
 interval=$2
 reinit=$3
 debug=$4
+ftpserver=$5
+ftplogin=$6
+ftppass=$7
+
+filename="$(uname -n)"
 
 if [ -z "$debug" ]; then
         debug="0"
@@ -38,6 +46,12 @@ if [ -z "$startdate" ]; then
         startdate="2023-04-01 00:00:00"
 fi
 
+if [ -z "$ftpserver" ]; then
+        ftpserver=""
+        ftplogin=""
+        ftppassword=""
+fi
+
 if [ "$debug" != "0" ]; then
         echo "startdate : $startdate"
         echo "interval  : $interval"
@@ -53,14 +67,14 @@ do
         if [ "$debug" != "0" ]; then
                 echo $uptime_csv_content
         fi
-        # Now filling number of transactions CSV file
-        #echo $d
 
-        uptime_csv="./{replace_with_your_own_filename}.csv"
+        uptime_csv="./${filename}.csv"
 
-        ftpuptime="curl -s -T \"${uptime_csv}\" ftp://{put_your_ftp_server_address_here} --user {ftp_user}:{ftp_password}"
+        ftpuptime="curl -s -T \"${uptime_csv}\" {$ftpserver} --user {$ftpuser}:{$ftppass}"
 
-        #echo $ftpstring
+        if [ "$debug" != "0" ]; then
+                echo $ftpuptime
+        fi
 
         if [ ! -f "$uptime_csv" ] || [ "$reinit" == "1" ]; then
                 if [ "$debug" != "0" ]; then
@@ -69,7 +83,7 @@ do
                 reinit="0"
                 echo "Time,Score" > "$uptime_csv"
 
-                # fill up file with transaction history
+                # fill up file with uptime history
                 # get startdate
                 dt_sdt=$(date -d "$startdate" "+%s")
                 dt_comp=$(($dt_sdt+$interval-86400))
@@ -79,13 +93,9 @@ do
                 # loop by one day until date is dt_cur
                 while [ "$dt_comp2" -lt "$dt_cur" ];
                 do
-                        #echo $dt_comp
-                        #echo $dt_cur
                         d_comp=$(date -d "@${dt_comp}" "+%Y-%m-%d %H:%M:%S")
                         d_comp2=$(date -d "@${dt_comp2}" "+%Y-%m-%d %H:%M:%S")
-                        #echo "$date $dt_comp"
-                        #echo "$d_comp"
-                        # Call API
+
                         epoch=$(date +%s)
 
                         if [ "$debug" != "0" ]; then
@@ -98,8 +108,7 @@ do
                         if [ "$debug" != "0" ]; then
                                 echo $uptime_csv_content
                         fi
-                        #echo $available2
-                        # Now Add this to file
+
                         d2=$(date -d "@${dt_comp}" "+%F %H:%M:%S")
 
                         echo $uptime_csv_content >> "$uptime_csv"
@@ -118,11 +127,9 @@ do
 
         echo $uptime_csv_content >> "$uptime_csv"
 
-        eval "$ftpuptime"
-        #eval "$ftpsp"
-        #eval "$ftpsns"
-        #eval "$ftpsnp"
+        if [ "$ftpserver" != "" ]; then
+          eval "$ftpuptime"
+        fi
 
         sleep $interval
-        #echo "after sleep"
 done
