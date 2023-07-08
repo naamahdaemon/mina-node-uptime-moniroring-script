@@ -27,4 +27,24 @@ The script handles the ftp upload of this file to a distant web server that can 
 ./uptime.sh "2023-01-01T00:00:00" 21600 1 0 "" "" ""
 ```
 
-The generate filename is based on `uname -m`
+The generate filename is based on `uname -n`
+
+Example
+`mycomputer.csv`
+
+The content of the file will consist of a `csv` file with `date`,`value` for each line.
+
+Example
+```
+Time,Score
+2023-05-01 00:00:00,91
+2023-05-02 00:00:00,96
+2023-05-03 00:00:00,96
+2023-05-04 00:00:00,92
+```
+
+> In the exemple file, we can see the script parse the logs every 24h to get the 24h splipping ticks every 24h.
+> On May, 1st, 91 uptime ticks have been successfully sent to the uptime server. It means that 5 ticks have been missed.
+> On May, 2d, 96 uptime ticks have been successfully sent to the uptime server. Mina server uptime for this date will be 100%
+
+
