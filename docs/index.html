@@ -1,2 +1,25 @@
 <html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale:0.8">
+		<link href="style.css" rel="stylesheet">	 
+    </head>
+    <body>
+	<div id="content"></div>
+	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+	<script>
+	  // Fetch the Markdown file
+	  fetch('../README.md')
+		.then(response => response.text())
+		.then(data => {
+		  // Convert Markdown to HTML using Marked
+		  const htmlContent = marked.parse(data);
+
+		  // Set the HTML content to the target element
+		  document.getElementById('content').innerHTML = htmlContent;
+		})
+		.catch(error => console.error(error));
+	</script>
+	<br/>
+	<hr/>
+    </body>
 </html>
