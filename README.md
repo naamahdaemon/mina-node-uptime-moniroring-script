@@ -21,7 +21,7 @@ The script handles the ftp upload of this file to a distant web server that can 
 |`ftp login`    | FTP login |
 |`ftp passowrd` | FTP password |
 
-# Exemple
+# Example
 ## Init Uptime CSV file from 01/01/2023 with 6 hour step
 ```
 ./uptime.sh "2023-01-01T00:00:00" 21600 1 0 "" "" ""
@@ -54,4 +54,26 @@ It uses filtered journalctl parsing to get the numbers of ticks for the last 24h
 ```
 d=$(date '+%F %H:%M:%S')
 uptime_csv_content="$d,$(journalctl --user -u mina -S "24 hours ago"  | grep "Sent block with state" | wc -l)"
+uptime_csv="./${filename}.csv"
+...
+echo $uptime_csv_content >> "$uptime_csv"
 ```
+
+# Sending updated `csv` file to a web server
+Specifying `ftp_server`, `ftp login`, `ftp passowrd` in the command line will send the updated `csv` file each `Interval` to an ftp server (in a way the file can be used by a simple web page to display the graph result). 
+
+Example : Send updated uptime file to ftp://webserver.com every 2 hours (7200 seconds)  
+```
+./uptime.sh "2023-01-01T00:00:00" 7200 0 0 "ftp://webserver.com" "user" "pass"
+```
+# Display the results
+You can just rely on the `CSV` file to check your uptime.
+You can use the file locally or on a remote machine to handle graphical representation of your uptime.  
+Source for a simple web page project displaying graph based on `CSV` file is avalable here :
+
+https://github.com/naamahdaemon/naamahdaemon.github.io
+
+And an example of rendering here : https://naamahdaemon.github.io/
+
+
+
