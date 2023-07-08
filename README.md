@@ -47,4 +47,11 @@ Time,Score
 > On May, 1st, 91 uptime ticks have been successfully sent to the uptime server. It means that 5 ticks have been missed.
 > On May, 2d, 96 uptime ticks have been successfully sent to the uptime server. Mina server uptime for this date will be 100%
 
+# How it works
+The way the script work is really simple.
+It uses filtered journalctl parsing to get the numbers of ticks for the last 24h every `Interval` seconds and then append the result to the `csv` file.
 
+```
+d=$(date '+%F %H:%M:%S')
+uptime_csv_content="$d,$(journalctl --user -u mina -S "24 hours ago"  | grep "Sent block with state" | wc -l)"
+```
