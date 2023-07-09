@@ -21,6 +21,7 @@ The script handles the ftp upload of this file to a distant web server that can 
 |`ftp login`    | FTP login |
 |`ftp passowrd` | FTP password |
 
+<br/>
  
 # Example
 ## Init Uptime CSV file from 01/01/2023 with 6 hour step
