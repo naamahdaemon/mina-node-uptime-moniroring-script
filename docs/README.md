@@ -1,7 +1,7 @@
 # mina-node-uptime-moniroring-script
 > Simple shell script to monitor your node uptime
 
-**github project page**
+**github project page**  
 https://github.com/naamahdaemon/mina-node-uptime-moniroring-script/
 
 # Description
